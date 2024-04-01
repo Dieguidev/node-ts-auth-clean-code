@@ -15,6 +15,6 @@ export class AuthController {
   }
 
   loginUser = (req: Request, res: Response) => {
-    res.json('loginUser ')
+    res.json('loginUser')
   }
 }
