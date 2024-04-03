@@ -1,6 +1,7 @@
 import { BcryptAdapter } from "../../config";
 import { UserModel } from "../../data/mongodb";
 import { AuthDatasource, CustomError, RegisterUserDto, UserEntity } from "../../domain";
+import { UserMapper } from "../mappers/user.mapper";
 
 //* type para declarar las funciones de dependencias y no tenerlas ocultas
 type HashFunction = (password: string) => string;
@@ -35,13 +36,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
       await user.save();
 
       //3. mapear la respuesta a nuestra entidad
-      return new UserEntity(
-        user.id,
-        name,
-        email,
-        user.password,
-        user.role,
-      )
+      return UserMapper.userEntityFromObject(user)
 
     } catch (error) {
       if (error instanceof CustomError) {
