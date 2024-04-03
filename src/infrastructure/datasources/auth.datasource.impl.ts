@@ -2,9 +2,20 @@ import { BcryptAdapter } from "../../config";
 import { UserModel } from "../../data/mongodb";
 import { AuthDatasource, CustomError, RegisterUserDto, UserEntity } from "../../domain";
 
+//* type para declarar las funciones de dependencias y no tenerlas ocultas
+type HashFunction = (password: string) => string;
+type ConpareFunction = (password: string, hashed: string) => boolean;
 
 
 export class AuthDatasourceImpl implements AuthDatasource {
+
+  constructor(
+    private readonly hashPassword: HashFunction = BcryptAdapter.hash,  //BcryptAdapter.hash le da valor por defecto para no tener que enviarlo
+    private readonly comparePassword: ConpareFunction = BcryptAdapter.compare,
+  ) { }
+
+
+
   async register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
 
     const { name, email, password } = registerUserDto;
@@ -19,7 +30,7 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
 
       //2. hash de contraseña
-      const user = new UserModel({ name, email, password: BcryptAdapter.hash(password) });
+      const user = new UserModel({ name, email, password: this.hashPassword(password) });
 
       await user.save();
 
