@@ -22,6 +22,7 @@ export class AuthRoutes {
 
     router.post('/login', controller.loginUser)
     router.post('/register', controller.registerUser)
+    router.put('/update', controller.updateUser)
 
     router.get('/', [AuthMiddleware.validateJWT], controller.getUsers)
 
