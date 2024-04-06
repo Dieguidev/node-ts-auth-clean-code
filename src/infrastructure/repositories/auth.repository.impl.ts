@@ -1,4 +1,4 @@
-import { AuthDatasource, AuthRepository, LoginUserDto, RegisterUserDto, UpdateUserDto, UserEntity } from "../../domain";
+import { AuthDatasource, AuthRepository, GetAndDeleteUserDto, LoginUserDto, RegisterUserDto, UpdateUserDto, UserEntity } from "../../domain";
 
 
 
@@ -16,6 +16,10 @@ export class AuthRepositoryImpl implements AuthRepository {
 
   register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
     return this.authDatasource.register(registerUserDto);
+  }
+
+  delete(getAndDeleteUserDto: GetAndDeleteUserDto): Promise<UserEntity> {
+    return this.authDatasource.delete(getAndDeleteUserDto);
   }
 
 }

@@ -22,7 +22,8 @@ export class AuthRoutes {
 
     router.post('/login', controller.loginUser)
     router.post('/register', controller.registerUser)
-    router.put('/update', controller.updateUser)
+    router.put('/update', [AuthMiddleware.validateJWT], controller.updateUser)
+    router.delete('/:id', controller.deleteUser)
 
     router.get('/', [AuthMiddleware.validateJWT], controller.getUsers)
 

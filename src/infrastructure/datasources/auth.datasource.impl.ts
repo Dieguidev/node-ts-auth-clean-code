@@ -1,7 +1,7 @@
 import { UserMapper } from "..";
 import { BcryptAdapter } from "../../config";
 import { UserModel } from "../../data/mongodb";
-import { AuthDatasource, CustomError, LoginUserDto, RegisterUserDto, UpdateUserDto, UserEntity } from "../../domain";
+import { AuthDatasource, CustomError, GetAndDeleteUserDto, LoginUserDto, RegisterUserDto, UpdateUserDto, UserEntity } from "../../domain";
 
 
 
@@ -95,6 +95,29 @@ export class AuthDatasourceImpl implements AuthDatasource {
       await user.save();
 
       //3. mapear la respuesta a nuestra entidad
+      return UserMapper.userEntityFromObject(user)
+
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      throw CustomError.internalServer();
+    }
+  }
+
+  async delete(getAndDeleteUserDto: GetAndDeleteUserDto): Promise<UserEntity> {
+
+    const { id } = getAndDeleteUserDto;
+
+    try {
+
+      //1. verificar si el usuario existe
+      const user = await UserModel.findByIdAndUpdate(id, { status: false }, { new: true });
+      if (!user) {
+        throw CustomError.badRequest('User not exists');
+      }
+
+      //2. mapear la respuesta a nuestra entidad
       return UserMapper.userEntityFromObject(user)
 
     } catch (error) {

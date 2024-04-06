@@ -22,6 +22,10 @@ const userSchema = new Schema({
     type: [String],
     default: ['USER_ROLE'],
     enum: ['USER_ROLE', 'ADMIN_ROLE']
+  },
+  status: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true

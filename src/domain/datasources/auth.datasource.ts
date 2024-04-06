@@ -1,5 +1,5 @@
 
-import { LoginUserDto, RegisterUserDto, UpdateUserDto } from "..";
+import { GetAndDeleteUserDto, LoginUserDto, RegisterUserDto, UpdateUserDto } from "..";
 import { UserEntity } from "../entities/user.entity";
 
 
@@ -13,5 +13,7 @@ export abstract class AuthDatasource {
   abstract register(registerUserDto: RegisterUserDto): Promise<UserEntity>;
 
   abstract update(updateUserDto: UpdateUserDto): Promise<UserEntity>;
+
+  abstract delete(getAndDeleteUserDto: GetAndDeleteUserDto): Promise<UserEntity>;
 
 }

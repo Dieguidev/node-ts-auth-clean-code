@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, UpdateUser, UpdateUserDto } from "../../domain"
+import { AuthRepository, CustomError, DeleteUser, GetAndDeleteUserDto, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, UpdateUser, UpdateUserDto } from "../../domain"
 import { JwtAdapter } from "../../config/jwt";
 import { UserModel } from "../../data/mongodb";
 
@@ -48,7 +48,7 @@ export class AuthController {
     const [error, updateUserDto] = UpdateUserDto.create(req.body)
     if (error) return res.status(400).json({ error })
 
-      console.log(updateUserDto);
+    console.log(updateUserDto);
 
     new UpdateUser(this.authRepository)
       .execute(updateUserDto!)
@@ -56,6 +56,17 @@ export class AuthController {
       .catch(error => this.handleError(error, res));
   }
 
+
+  deleteUser = (req: Request, res: Response) => {
+    const { id } = req.params
+    const [error, getAndDeleteUserDto] = GetAndDeleteUserDto.create({ id })
+    if (error) return res.status(400).json({ error })
+
+    new DeleteUser(this.authRepository)
+      .execute(getAndDeleteUserDto!)
+      .then(user => res.json(user))
+      .catch(error => this.handleError(error, res));
+  }
 
   getUsers = (req: Request, res: Response) => {
     UserModel.find()

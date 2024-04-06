@@ -9,6 +9,7 @@ export class UserEntity {
     public email: string,
     public password: string,
     public role: string[],
+    public status?: boolean,
     public img?: string,
   ) {}
 }
